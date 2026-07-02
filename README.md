@@ -190,8 +190,7 @@ http://localhost:5173
 
 GitHub: https://github.com/RohithArjun
 
-LinkedIn: *(Add your LinkedIn profile here)*
-
+LinkedIn: https://www.linkedin.com/in/rohit-kumar-developer/
 ---
 
 # ⭐ Show Your Support
