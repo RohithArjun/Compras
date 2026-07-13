@@ -1,230 +1,121 @@
-import React, { useEffect, useState } from "react";
-import Home from "./Home"
-import axios from "axios";
-// import { json } from "react-router-dom";
-// import { BiSunFill, BiMoon } from "react-icons/bi";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
-const Navbar = ({ onSelectCategory, onSearch }) => {
-  const getInitialTheme = () => {
-    const storedTheme = localStorage.getItem("theme");
-    return storedTheme ? storedTheme : "light-theme";
-  };
+const Navbar = ({ onSelectCategory, currentUser, setCurrentUser, data }) => {
   const navigate = useNavigate();
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [theme, setTheme] = useState(getInitialTheme());
-  const [input, setInput] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
-  const [noResults, setNoResults] = useState(false);
-  const [searchFocused, setSearchFocused] = useState(false);
-  const [showSearchResults,setShowSearchResults] = useState(false)
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showSearchPanel, setShowSearchPanel] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(() => localStorage.getItem("theme") === "dark");
+
   useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async (value) => {
-    try {
-      const response = await axios.get("http://localhost:8080/api/products");
-      setSearchResults(response.data);
-      console.log(response.data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
-  const handleChange = async (value) => {
-    setInput(value);
-    if (value.length >= 1) {
-      setShowSearchResults(true)
-    try {
-      const response = await axios.get(
-        `http://localhost:8080/api/products/search?keyword=${value}`
-      );
-      setSearchResults(response.data);
-      setNoResults(response.data.length === 0);
-      console.log(response.data);
-    } catch (error) {
-      console.error("Error searching:", error);
-    }
+    if (isDarkMode) {
+      document.documentElement.classList.add("dark-theme");
+      localStorage.setItem("theme", "dark");
     } else {
-      setShowSearchResults(false);
-      setSearchResults([]);
-      setNoResults(false);
+      document.documentElement.classList.remove("dark-theme");
+      localStorage.setItem("theme", "light");
     }
+  }, [isDarkMode]);
+
+  // Normalize categories to lowercase to properly remove case-sensitive duplicates
+  const categories = data && Array.isArray(data) 
+    ? [...new Set(data.map((item) => item.category?.trim().toLowerCase()).filter(Boolean))] 
+    : [];
+
+  const searchResults = searchQuery && data
+    ? data.filter((item) => item.name?.toLowerCase().includes(searchQuery.toLowerCase()))
+    : [];
+
+  const handleLogout = () => {
+    localStorage.removeItem("authenticatedUser");
+    setCurrentUser(null);
+    navigate("/login");
   };
 
-  
-  // const handleChange = async (value) => {
-  //   setInput(value);
-  //   if (value.length >= 1) {
-  //     setShowSearchResults(true);
-  //     try {
-  //       let response;
-  //       if (!isNaN(value)) {
-  //         // Input is a number, search by ID
-  //         response = await axios.get(`http://localhost:8080/api/products/search?id=${value}`);
-  //       } else {
-  //         // Input is not a number, search by keyword
-  //         response = await axios.get(`http://localhost:8080/api/products/search?keyword=${value}`);
-  //       }
-
-  //       const results = response.data;
-  //       setSearchResults(results);
-  //       setNoResults(results.length === 0);
-  //       console.log(results);
-  //     } catch (error) {
-  //       console.error("Error searching:", error.response ? error.response.data : error.message);
-  //     }
-  //   } else {
-  //     setShowSearchResults(false);
-  //     setSearchResults([]);
-  //     setNoResults(false);
-  //   }
-  // };
-
-const handleCategorySelect = (category) => {
-  setSelectedCategory(category);
-  onSelectCategory(category);
-};
-  const toggleTheme = () => {
-    const newTheme = theme === "dark-theme" ? "light-theme" : "dark-theme";
-    setTheme(newTheme);
-    localStorage.setItem("theme", newTheme);
-  };
-
-  useEffect(() => {
-    document.body.className = theme;
-  }, [theme]);
-
-  const categories = [
-    "Laptop",
-    "Headphone",
-    "Mobile",
-    "Electronics",
-    "Toys",
-  ];
   return (
-    <>
-      <header>
-        <nav className="navbar navbar-expand-lg fixed-top">
-          <div className="container-fluid">
-            <a className="navbar-brand" >
-              Compras
-            </a>
-            <button
-              className="navbar-toggler"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#navbarSupportedContent"
-              aria-controls="navbarSupportedContent"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-            >
-              <span className="navbar-toggler-icon"></span>
-            </button>
-            <div
-              className="collapse navbar-collapse"
-              id="navbarSupportedContent"
-            >
-              <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                <li className="nav-item">
-                  <a className="nav-link active" aria-current="page" href="/">
-                    Home
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="/add_product">
-                    Add Product
-                  </a>
-                </li>
-
-                <li className="nav-item dropdown">
-                  <a
-                    className="nav-link dropdown-toggle"
-                    href="/"
-                    role="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  >
-                    Categories
-                  </a>
-
-                  <ul className="dropdown-menu">
-                    {categories.map((category) => (
-                      <li key={category}>
-                        <button
-                          className="dropdown-item"
-                          onClick={() => handleCategorySelect(category)}
-                        >
-                          {category}
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                </li>
-
-                <li className="nav-item"></li>
-              </ul>
-              <button className="theme-btn" onClick={() => toggleTheme()}>
-                {theme === "dark-theme" ? (
-                  <i className="bi bi-moon-fill"></i>
-                ) : (
-                  <i className="bi bi-sun-fill"></i>
-                )}
-              </button>
-              <div className="d-flex align-items-center cart">
-                <a href="/cart" className="nav-link text-dark">
-                  <i
-                    className="bi bi-cart me-2"
-                    style={{ display: "flex", alignItems: "center" }}
-                  >
-                    Cart
-                  </i>
-                </a>
-                {/* <form className="d-flex" role="search" onSubmit={handleSearch} id="searchForm"> */}
-                <input
-                  className="form-control me-2"
-                  type="search"
-                  placeholder="Search"
-                  aria-label="Search"
-                  value={input}
-                  onChange={(e) => handleChange(e.target.value)}
-                  onFocus={() => setSearchFocused(true)} // Set searchFocused to true when search bar is focused
-                  onBlur={() => setSearchFocused(false)} // Set searchFocused to false when search bar loses focus
-                />
-                {showSearchResults && (
-                  <ul className="list-group">
-                    {searchResults.length > 0 ? (  
-                        searchResults.map((result) => (
-                          <li key={result.id} className="list-group-item">
-                            <a href={`/product/${result.id}`} className="search-result-link">
-                            <span>{result.name}</span>
-                            </a>
-                          </li>
-                        ))
-                    ) : (
-                      noResults && (
-                        <p className="no-results-message">
-                          No Prouduct with such Name
-                        </p>
-                      )
-                    )}
-                  </ul>
-                )}
-                {/* <button
-                  className="btn btn-outline-success"
-                  onClick={handleSearch}
-                >
-                  Search Products
-                </button> */}
-                {/* </form> */}
-                <div />
-              </div>
+    <header className="custom-app-header-wrapper">
+      <nav className="custom-premium-navbar">
+        <div className="nav-left-brand-block">
+          <Link to="/" className="brand-logo" style={{ textDecoration: "none", color: "inherit", fontWeight: 800 }}>
+            Compras
+          </Link>
+          
+          {currentUser && (
+            <div className="nav-static-links">
+              <Link to="/" className="nav-link-item" style={{ textDecoration: "none" }}>Home</Link>
+              {currentUser.userRole === "ADMIN" && (
+                <Link to="/add_product" className="nav-link-item" style={{ textDecoration: "none" }}>Add Product</Link>
+              )}
             </div>
+          )}
+        </div>
+
+        <div className="nav-right-utility-block">
+          <div className="search-input-wrapper-box">
+            <i className="bi bi-search native-search-icon"></i>
+            <input
+              type="text"
+              className="form-control custom-search-input"
+              placeholder="Search products..."
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setShowSearchPanel(e.target.value.length > 0);
+              }}
+              onFocus={() => searchQuery.length > 0 && setShowSearchPanel(true)}
+              onBlur={() => setTimeout(() => setShowSearchPanel(false), 200)}
+            />
+
+            {showSearchPanel && searchResults.length > 0 && (
+              <div className="search-floating-panel">
+                <ul className="search-results-list">
+                  {searchResults.map((product) => (
+                    <li key={product.id}>
+                      <Link to={`/product/${product.id}`} style={{ textDecoration: "none", color: "inherit", display: "block" }}>
+                        {product.name} <span style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>in {product.category}</span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
-        </nav>
-      </header>
-    </>
+
+          <div className="pill-theme-switcher" onClick={() => setIsDarkMode(!isDarkMode)}>
+            <div className={`theme-indicator-slider ${isDarkMode ? "slide-right" : ""}`}></div>
+            <i className="bi bi-sun-fill theme-pill-icon light-icon"></i>
+            <i className="bi bi-moon-stars-fill theme-pill-icon dark-icon"></i>
+          </div>
+
+          {currentUser ? (
+            <>
+              <span className="badge-purple-tag" style={{ fontSize: "0.8rem" }}>
+                Hi, {currentUser.firstName || "User"} ({currentUser.userRole})
+              </span>
+              <span className="nav-link-item" onClick={handleLogout} style={{ cursor: "pointer" }}>
+                <i className="bi bi-box-arrow-right"></i> Logout
+              </span>
+              <Link to="/cart" className="compact-cart-badge"><i className="bi bi-bag-heart-fill"></i></Link>
+            </>
+          ) : (
+            <Link to="/login" className="nav-link-item" style={{ textDecoration: "none" }}>Sign In</Link>
+          )}
+        </div>
+      </nav>
+
+      <div className="subheader-filter-zone" style={{ padding: "0.5rem 1.5rem", background: "var(--nav-bg)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+        <div className="category-pills-row" style={{ display: "flex", gap: "0.5rem", overflowX: "auto" }}>
+          <button className="pill-item-button" onClick={() => onSelectCategory("")}>
+            All Products
+          </button>
+          {categories.map((cat, idx) => (
+            <button key={idx} className="pill-item-button" onClick={() => onSelectCategory(cat)}>
+              {cat.charAt(0).toUpperCase() + cat.slice(1)}
+            </button>
+          ))}
+        </div>
+      </div>
+    </header>
   );
 };
 
