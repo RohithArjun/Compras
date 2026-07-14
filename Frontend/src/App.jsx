@@ -9,11 +9,15 @@ import AddProduct from "./components/AddProduct";
 import ProductDetail from "./components/ProductDetails";
 import UpdateProduct from "./components/UpdateProduct";
 import Login from "./components/Login";
+import About from "./components/About";
+import Contact from "./components/Contact";
+import Register from "./components/Register";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   const [cart, setCart] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [currentView, setCurrentView] = useState("home"); // Tracks 'home' layout vs 'shop' catalog layout
+  const [selectedCategory, setSelectedCategory] = useState("all"); // Matches modern category filters
   const [data, setData] = useState([]); // Standard product state
   
   const [currentUser, setCurrentUser] = useState(() => {
@@ -62,21 +66,32 @@ function App() {
     return children;
   };
 
+  // Calculates the total number of items currently in the shopping cart
+  const totalCartItemsCount = cart.reduce((total, item) => total + (item.quantity || 1), 0);
+
   return (
     <BrowserRouter>
-      {/* Pass data as a normal prop */}
       <Navbar 
-        onSelectCategory={setSelectedCategory} 
         currentUser={currentUser} 
         setCurrentUser={setCurrentUser} 
-        data={data}
+        setCurrentView={setCurrentView}
+        setSelectedCategory={setSelectedCategory}
+        cartCount={totalCartItemsCount}
       />
       <Routes>
         <Route path="/login" element={<Login setCurrentUser={setCurrentUser} currentUser={currentUser} />} />
+        <Route path="/register" element={<Register />} />
 
-        <Route path="/" element={
+        <Route path="/" element = {
           <RequireAuth>
-            <Home data={data} addToCart={addToCart} selectedCategory={selectedCategory} />
+            <Home 
+              data={data} 
+              addToCart={addToCart} 
+              currentView={currentView}
+              setCurrentView={setCurrentView}
+              selectedCategory={selectedCategory}
+              setSelectedCategory={setSelectedCategory}
+            />
           </RequireAuth>
         } />
         
@@ -107,6 +122,17 @@ function App() {
           <RequireAuth allowAdminOnly={true}>
             <UpdateProduct />
           </RequireAuth>
+        } />
+        <Route path="/about" element={
+          <RequireAuth>
+            <About />
+        </RequireAuth>
+        } />
+
+        <Route path="/contact" element={
+          <RequireAuth>
+            <Contact />
+        </RequireAuth>
         } />
       </Routes>
     </BrowserRouter>

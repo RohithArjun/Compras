@@ -1,30 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
-const Navbar = ({ onSelectCategory, currentUser, setCurrentUser, data }) => {
+const Navbar = ({ currentUser, setCurrentUser, setCurrentView, setSelectedCategory, cartCount }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
-  const [showSearchPanel, setShowSearchPanel] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(() => localStorage.getItem("theme") === "dark");
-
-  useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add("dark-theme");
-      localStorage.setItem("theme", "dark");
-    } else {
-      document.documentElement.classList.remove("dark-theme");
-      localStorage.setItem("theme", "light");
-    }
-  }, [isDarkMode]);
-
-  // Normalize categories to lowercase to properly remove case-sensitive duplicates
-  const categories = data && Array.isArray(data) 
-    ? [...new Set(data.map((item) => item.category?.trim().toLowerCase()).filter(Boolean))] 
-    : [];
-
-  const searchResults = searchQuery && data
-    ? data.filter((item) => item.name?.toLowerCase().includes(searchQuery.toLowerCase()))
-    : [];
 
   const handleLogout = () => {
     localStorage.removeItem("authenticatedUser");
@@ -32,89 +12,112 @@ const Navbar = ({ onSelectCategory, currentUser, setCurrentUser, data }) => {
     navigate("/login");
   };
 
+  const navigateToHome = () => {
+    setCurrentView("home");
+    setSelectedCategory("all");
+    navigate("/");
+  };
+
+  const navigateToShop = () => {
+    setCurrentView("shop");
+    setSelectedCategory("all");
+    navigate("/");
+  };
+
   return (
-    <header className="custom-app-header-wrapper">
-      <nav className="custom-premium-navbar">
-        <div className="nav-left-brand-block">
-          <Link to="/" className="brand-logo" style={{ textDecoration: "none", color: "inherit", fontWeight: 800 }}>
-            Compras
-          </Link>
-          
-          {currentUser && (
-            <div className="nav-static-links">
-              <Link to="/" className="nav-link-item" style={{ textDecoration: "none" }}>Home</Link>
-              {currentUser.userRole === "ADMIN" && (
-                <Link to="/add_product" className="nav-link-item" style={{ textDecoration: "none" }}>Add Product</Link>
-              )}
-            </div>
-          )}
+    <header>
+      <nav className="modern-navbar">
+        {/* Brand/Logo */}
+        <div className="brand-text" onClick={navigateToHome} style={{ cursor: "pointer" }}>
+          Compras
+        </div>
+        
+        {/* Navigation Links */}
+       <div className="nav-center-links">
+  <span 
+    onClick={navigateToHome} 
+    className={location.pathname === "/" && location.state?.view !== "shop" ? "active-link" : ""}
+    style={{ cursor: "pointer", color: "var(--text-main)", fontWeight: 600 }}
+  >
+    Home
+  </span>
+  <span 
+    onClick={navigateToShop} 
+    style={{ cursor: "pointer", color: "var(--text-main)", fontWeight: 600 }}
+  >
+    Shop
+  </span>
+
+  {/* Conditional Admin Tab */}
+  {currentUser?.userRole === "ADMIN" && (
+    <Link 
+      to="/add_product" 
+      style={{ textDecoration: "none", color: "var(--text-main)", fontWeight: 600 }}
+    >
+      Add Product
+    </Link>
+  )}
+
+  {/* NEW: Router Navigation Links */}
+  <Link 
+    to="/about" 
+    style={{ textDecoration: "none", color: "var(--text-main)", fontWeight: 600 }}
+  >
+    About Us
+  </Link>
+  <Link 
+    to="/contact" 
+    style={{ textDecoration: "none", color: "var(--text-main)", fontWeight: 600 }}
+  >
+    Contact
+  </Link>
+</div>
+
+        {/* Pill Search Input */}
+        <div className="pill-search">
+          <i className="bi bi-search" style={{ color: "var(--text-muted)" }}></i>
+          <input
+            type="text"
+            placeholder="Search for products..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
         </div>
 
-        <div className="nav-right-utility-block">
-          <div className="search-input-wrapper-box">
-            <i className="bi bi-search native-search-icon"></i>
-            <input
-              type="text"
-              className="form-control custom-search-input"
-              placeholder="Search products..."
-              value={searchQuery}
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
-                setShowSearchPanel(e.target.value.length > 0);
-              }}
-              onFocus={() => searchQuery.length > 0 && setShowSearchPanel(true)}
-              onBlur={() => setTimeout(() => setShowSearchPanel(false), 200)}
-            />
-
-            {showSearchPanel && searchResults.length > 0 && (
-              <div className="search-floating-panel">
-                <ul className="search-results-list">
-                  {searchResults.map((product) => (
-                    <li key={product.id}>
-                      <Link to={`/product/${product.id}`} style={{ textDecoration: "none", color: "inherit", display: "block" }}>
-                        {product.name} <span style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>in {product.category}</span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-
-          <div className="pill-theme-switcher" onClick={() => setIsDarkMode(!isDarkMode)}>
-            <div className={`theme-indicator-slider ${isDarkMode ? "slide-right" : ""}`}></div>
-            <i className="bi bi-sun-fill theme-pill-icon light-icon"></i>
-            <i className="bi bi-moon-stars-fill theme-pill-icon dark-icon"></i>
-          </div>
-
+        {/* Action Buttons */}
+        <div className="nav-actions">
           {currentUser ? (
             <>
-              <span className="badge-purple-tag" style={{ fontSize: "0.8rem" }}>
-                Hi, {currentUser.firstName || "User"} ({currentUser.userRole})
-              </span>
-              <span className="nav-link-item" onClick={handleLogout} style={{ cursor: "pointer" }}>
-                <i className="bi bi-box-arrow-right"></i> Logout
-              </span>
-              <Link to="/cart" className="compact-cart-badge"><i className="bi bi-bag-heart-fill"></i></Link>
+              <button className="btn-pill-teal">
+                {currentUser.userRole === "ADMIN" ? "Admin View" : "Customer View"}
+              </button>
+              
+              <button className="btn-pill-outline" onClick={handleLogout}>
+                Logout
+              </button>
             </>
           ) : (
-            <Link to="/login" className="nav-link-item" style={{ textDecoration: "none" }}>Sign In</Link>
+            <Link to="/login">
+              <button className="btn-pill-teal">Sign In</button>
+            </Link>
           )}
+
+          {/* Cart Icon Badge */}
+          <Link to="/cart" style={{ color: "var(--text-main)", fontSize: "1.2rem", position: "relative" }}>
+            <i className="bi bi-bag"></i>
+            {cartCount > 0 && (
+              <span style={{
+                position: "absolute", top: "-5px", right: "-10px", 
+                background: "var(--brand-teal)", color: "white", 
+                borderRadius: "50%", fontSize: "0.65rem", padding: "2px 6px",
+                fontWeight: "bold"
+              }}>
+                {cartCount}
+              </span>
+            )}
+          </Link>
         </div>
       </nav>
-
-      <div className="subheader-filter-zone" style={{ padding: "0.5rem 1.5rem", background: "var(--nav-bg)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-        <div className="category-pills-row" style={{ display: "flex", gap: "0.5rem", overflowX: "auto" }}>
-          <button className="pill-item-button" onClick={() => onSelectCategory("")}>
-            All Products
-          </button>
-          {categories.map((cat, idx) => (
-            <button key={idx} className="pill-item-button" onClick={() => onSelectCategory(cat)}>
-              {cat.charAt(0).toUpperCase() + cat.slice(1)}
-            </button>
-          ))}
-        </div>
-      </div>
     </header>
   );
 };

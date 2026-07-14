@@ -1,578 +1,373 @@
-/* ==========================================================================
-   GLOBAL DESIGN TOKENS & FORCED THEME RESET
-   ========================================================================== */
-
+/* --- MODERN LIGHT THEME BASE --- */
 :root {
-  /* --- Premium Soft Light Theme --- */
-  --bg-main: #f1f5f9;
-  --bg-card: #ffffff;
-  --bg-input: #ffffff;
-  --text-main: #0f172a;
-  --text-muted: #64748b;
-  
-  /* Accent Borders, Glows, and Outlines */
-  --border-primary: #2dd4bf;       /* Vibrant soft teal outline border */
-  --accent-purple: #a855f7;        /* Purple badge gradient */
-  --accent-cyan: #06b6d4;          /* Cyan badge gradient */
-  --btn-bg: #ffffff;
-  --btn-text: #0ea5e9;             /* Bright blue for visibility actions */
-  --card-shadow: 0 4px 20px rgba(15, 23, 42, 0.03);
-}
-
-.dark-theme {
-  /* --- Exact Matte Cyber Dark Theme --- */
-  --bg-main: #111827;              /* Deep canvas obsidian backdrop */
-  --bg-card: #1f2937;              /* Premium matte block cards */
-  --bg-input: #1f2937;
-  --text-main: #f9fafb;            /* High contrast text */
-  --text-muted: #9ca3af;           /* Muted description paragraphs */
-  
-  --border-primary: #374151;       /* Dark theme layout divider lines */
-  --accent-purple: #c084fc;
-  --accent-cyan: #22d3ee;
-  --btn-bg: #374151;
-  --btn-text: #9ca3af;
-  --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  --brand-teal: #3b9781;
+  --brand-teal-hover: #2d7a68;
+  --text-main: #1a202c;
+  --text-muted: #718096;
+  --bg-page: #ffffff;
+  --bg-hero: #f4f7f5;
+  --border-light: #edf2f7;
 }
 
 body {
-  background-color: var(--bg-main) !important;
-  color: var(--text-main) !important;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-page);
+  color: var(--text-main);
+  font-family: 'Inter', system-ui, sans-serif;
   margin: 0;
-  padding: 0;
-  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-
-/* ==========================================================================
-   MODULE 1: RE-ARCHITECTURE: PREMIUM HEADER GRID & BREADCRUMBS
-   ========================================================================== */
-
-.custom-app-header-wrapper {
-  position: fixed;
+/* --- NAVBAR --- */
+.modern-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 3rem;
+  background-color: var(--bg-page);
+  border-bottom: 1px solid var(--border-light);
+  position: sticky;
   top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1100;
-  background-color: var(--bg-main);
+  z-index: 1000;
 }
 
-.custom-premium-navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.75rem 2.5rem;
-  background-color: var(--bg-card);
-  border-bottom: 1px solid var(--border-primary);
-}
-
-.nav-left-brand-block {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-}
-
-.nav-static-links {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-}
-
-.nav-link-item {
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: var(--text-muted);
-  cursor: pointer;
-  transition: color 0.2s ease;
-}
-
-.nav-link-item:hover, .nav-link-item.active {
-  color: var(--text-main);
-}
-
-.micro-arrow {
-  font-size: 0.7rem;
-  margin-left: 0.25rem;
-  vertical-align: middle;
-}
-
-/* Right Side Tools Alignment Layout */
-.nav-right-utility-block {
-  display: flex;
-  align-items: center;
-  gap: 1.25rem;
-}
-
-/* Custom Horizontal Theme Slider Container */
-.pill-theme-switcher {
-  position: relative;
-  width: 64px;
-  height: 32px;
-  background-color: var(--bg-main);
-  border: 2px solid var(--border-primary);
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 6px;
-  cursor: pointer;
-}
-
-.theme-indicator-slider {
-  position: absolute;
-  top: 3px;
-  left: 4px;
-  width: 22px;
-  height: 22px;
-  background-color: var(--text-main);
-  border-radius: 50%;
-  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.theme-indicator-slider.slide-right {
-  transform: translateX(30px);
-}
-
-.theme-pill-icon {
-  font-size: 0.9rem;
-  z-index: 2;
-  pointer-events: none;
-}
-.dark-icon { color: #a855f7; }
-.light-icon { color: #f59e0b; }
-
-/* Bag Trigger Design */
-.compact-cart-badge {
-  font-size: 1.25rem;
-  color: var(--text-main);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-}
-
-/* Clean Input Wrapper Box */
-.search-input-wrapper-box {
-  position: relative;
-  width: 260px;
-}
-
-.native-search-icon {
-  position: absolute;
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--text-muted);
-  font-size: 0.85rem;
-  pointer-events: none;
-}
-
-.custom-search-input {
-  background-color: var(--bg-main) !important;
-  border: 2px solid var(--border-primary) !important;
-  color: var(--text-main) !important;
-  border-radius: 12px !important;
-  padding: 0.45rem 1rem 0.45rem 2.2rem !important;
-  font-size: 0.9rem;
-}
-
-/* Overlaying Search Window Pane */
-.search-floating-panel {
-  position: absolute;
-  top: calc(100% + 8px);
-  left: 0;
-  right: 0;
-  background-color: var(--bg-card);
-  border: 1px solid var(--border-primary);
-  border-radius: 14px;
-  box-shadow: var(--card-shadow);
-  z-index: 999;
-  max-height: 300px;
-  overflow-y: auto;
-}
-
-.search-results-list {
-  list-style: none;
-  margin: 0;
-  padding: 0.5rem 0;
-}
-
-.search-results-list li {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem 1.2rem;
-  color: var(--text-main);
-  cursor: pointer;
-  font-size: 0.9rem;
-  transition: background-color 0.15s ease;
-}
-
-.search-results-list li:hover {
-  background-color: var(--bg-main);
-  color: var(--accent-cyan);
-}
-
-/* Subheader Breadcrumbs Area */
-.subheader-filter-zone {
-  background-color: var(--bg-main);
-  padding: 0.75rem 2.5rem 0.25rem 2.5rem;
-  border-bottom: 1px solid var(--border-primary);
-}
-
-.breadcrumb-nav-strip {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  font-weight: 500;
-  margin-bottom: 0.75rem;
-}
-
-.breadcrumb-divider {
-  font-size: 0.65rem;
-}
-
-.clickable-crumb {
-  cursor: pointer;
-}
-.clickable-crumb:hover {
-  text-decoration: underline;
-  color: var(--text-main);
-}
-
-.active-crumb {
-  color: var(--accent-cyan);
-  font-weight: 700;
-}
-
-/* Dynamic Pill Buttons Custom Layout */
-.category-pills-row {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  overflow-x: auto;
-  padding-bottom: 0.5rem;
-  scrollbar-width: none;
-}
-
-.category-pills-row::-webkit-scrollbar {
-  display: none;
-}
-
-.pill-item-button {
-  background-color: var(--bg-card);
-  border: 2px solid var(--border-primary);
-  color: var(--text-main);
-  padding: 0.4rem 1.15rem;
-  border-radius: 12px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.15s ease;
-}
-
-.pill-item-button.active, .pill-item-button:hover {
-  background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
-  color: #ffffff !important;
-  border-color: transparent;
-}
-
-
-/* ==========================================================================
-   MODULE 2: MAIN DASHBOARD GRID WITH FLEX OFFSET
-   ========================================================================== */
-
-/* Offset spacer blocks for main grid layouts to clear multi-fixed navbar stacks */
-.app-main-layout-container, .products-dashboard-grid {
-  margin-top: 175px !important;
-}
-
-.products-dashboard-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
-  padding: 1.5rem 2.5rem;
-}
-
-
-/* ==========================================================================
-   MODULE 3: COMPONENT CARDS, PILLED BADGES & INTERACTIVE IMAGES
-   ========================================================================== */
-
-.premium-product-card {
-  background-color: var(--bg-card) !important;
-  border: 2px solid var(--border-primary) !important;
-  border-radius: 24px !important;
-  padding: 1.5rem !important;
-  box-shadow: var(--card-shadow) !important;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-/* Color Coded Custom Pill Badges */
-.badge-purple-tag {
-  background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
-  color: #ffffff;
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  padding: 0.35rem 0.85rem;
-  border-radius: 10px;
-  width: fit-content;
-}
-
-.badge-new-glow {
-  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
-  color: #ffffff;
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 0.35rem 0.85rem;
-  border-radius: 10px;
-  margin-left: auto;
-}
-
-.card-title-header-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.product-card-title {
-  font-size: 1.6rem !important;
-  font-weight: 800 !important;
-  color: var(--text-main) !important;
-  margin: 0;
-}
-
-.product-card-brand {
-  font-size: 0.9rem;
-  color: var(--text-muted);
-  font-weight: 500;
-}
-
-.product-description-text {
-  font-size: 0.95rem;
-  color: var(--text-muted);
-  line-height: 1.5;
-}
-
-.product-card-price {
+.brand-text {
   font-size: 1.5rem;
   font-weight: 800;
-  color: var(--accent-cyan);
-  margin: 0.5rem 0;
+  color: #0f172a;
 }
 
-/* Image Presentation Blocks */
-.card-image-display-frame {
-  width: 100%;
-  border-radius: 16px;
-  overflow: hidden;
-  border: 1px solid var(--border-primary);
-  background-color: transparent;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.card-image-display-frame img {
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-}
-
-
-/* ==========================================================================
-   MODULE 4: ACTIONS AND INTERACTIVE BOTTOM CONTROLS
-   ========================================================================== */
-
-.card-action-footer-buttons {
-  display: flex;
-  gap: 1rem;
-  margin-top: auto;
-  padding-top: 0.5rem;
-}
-
-.btn-card-action {
-  flex: 1;
-  background-color: var(--btn-bg) !important;
-  color: var(--btn-text) !important;
-  border: 2px solid var(--border-primary) !important;
-  border-radius: 12px !important;
-  padding: 0.6rem !important;
-  font-weight: 700 !important;
-  font-size: 0.95rem !important;
-  transition: all 0.15s ease;
-  cursor: pointer;
-}
-
-.btn-card-action:hover {
-  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple)) !important;
-  color: #ffffff !important;
-  border-color: transparent !important;
-}
-
-
-/* ==========================================================================
-   MODULE 5: SIDE-BY-SIDE SPLIT INTERFACE & PROFILE PANE
-   ========================================================================== */
-
-.app-main-layout-container {
+.nav-center-links {
   display: flex;
   gap: 2rem;
-  padding: 1rem 2.5rem;
-  align-items: flex-start;
+  font-weight: 500;
+  font-size: 0.95rem;
 }
 
-@media (max-width: 991px) {
-  .app-main-layout-container {
-    flex-direction: column;
-  }
+.nav-center-links .active-link {
+  color: var(--brand-teal);
+  border-bottom: 2px solid var(--brand-teal);
+  padding-bottom: 4px;
 }
 
-.left-content-workspace {
-  flex: 1;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
+.pill-search {
+  display: flex;
+  align-items: center;
+  background: #f1f5f9;
+  border-radius: 50px;
+  padding: 0.5rem 1rem;
+  width: 300px;
 }
 
-.single-profile-mode {
-  grid-template-columns: 1fr !important;
+.pill-search input {
+  border: none;
+  background: transparent;
+  outline: none;
+  width: 100%;
+  margin-left: 10px;
+  font-size: 0.9rem;
 }
 
-
-/* ==========================================================================
-   MODULE 6: RIGHT SIDE COMPANION SHOPPING BAG CARD
-   ========================================================================== */
-
-.shopping-bag-sidebar-card {
-  width: 420px;
-  background-color: var(--bg-card);
-  border: 2px solid var(--border-primary);
-  border-radius: 24px;
-  padding: 1.75rem;
-  box-shadow: var(--card-shadow);
-  position: sticky;
-  top: 85px; 
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
 }
 
-@media (max-width: 991px) {
-  .shopping-bag-sidebar-card {
-    width: 100%;
-    position: static;
-  }
+.btn-pill-teal {
+  background-color: var(--brand-teal);
+  color: white;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 50px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.2s;
 }
 
-.bag-card-title {
-  font-size: 1.2rem;
-  font-weight: 800;
+.btn-pill-teal:hover {
+  background-color: var(--brand-teal-hover);
+}
+
+.btn-pill-outline {
+  background-color: transparent;
   color: var(--text-main);
-  margin-bottom: 1.25rem;
-  border-bottom: 1px solid var(--border-primary);
-  padding-bottom: 0.5rem;
+  border: 1px solid #cbd5e1;
+  padding: 0.5rem 1.2rem;
+  border-radius: 50px;
+  font-weight: 500;
+  cursor: pointer;
 }
 
-.bag-item-row-entry {
+/* --- HERO SECTION --- */
+.hero-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background-color: var(--bg-hero);
+  margin: 2rem 3rem;
+  border-radius: 24px;
+  overflow: hidden;
+  min-height: 400px;
+}
+
+.hero-text-content {
+  padding: 4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.hero-badge {
+  color: var(--brand-teal);
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.hero-title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+  color: #0f172a;
+  margin-bottom: 1rem;
+}
+
+.hero-title span {
+  color: var(--brand-teal);
+}
+
+.hero-image-wrapper {
+  background-image: url('https://images.unsplash.com/photo-1603302576837-37561b2e2302?auto=format&fit=crop&q=80&w=800'); /* Placeholder modern tech image */
+  background-size: cover;
+  background-position: center;
+}
+
+/* --- CATEGORY CARDS --- */
+.category-card {
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+  border: none;
+}
+
+.category-card:hover {
+  transform: translateY(-5px);
+}
+
+.category-img-box {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem; /* For emoji placeholders */
+}
+
+/* --- FEATURES BANNER --- */
+.features-banner {
+  display: flex;
+  justify-content: space-between;
+  background: var(--bg-hero);
+  margin: 3rem;
+  padding: 2rem;
+  border-radius: 16px;
+}
+
+.feature-item {
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 1rem 0;
-  border-bottom: 1px solid var(--border-primary);
 }
 
-.bag-item-thumb {
-  width: 50px;
-  height: 50px;
-  object-fit: contain;
+.feature-icon {
+  background: white;
+  color: var(--brand-teal);
+  width: 40px;
+  height: 40px;
   border-radius: 8px;
-  border: 1px solid var(--border-primary);
-  background-color: #ffffff;
-}
-
-.bag-counter-widget-group {
   display: flex;
   align-items: center;
-  background-color: var(--bg-main);
-  border-radius: 8px;
-  border: 1px solid var(--border-primary);
-  overflow: hidden;
+  justify-content: center;
+  font-size: 1.2rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
 
-.bag-counter-widget-group button {
-  background: transparent;
-  border: none;
-  color: var(--text-main);
-  padding: 0.25rem 0.6rem;
-  font-weight: 800;
-  cursor: pointer;
+/* --- PRODUCT DETAILS LAYOUT --- */
+.details-container {
+  max-width: 1200px;
+  margin: 3rem auto;
+  padding: 0 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: start;
 }
 
-.bag-counter-widget-group .count-value {
-  padding: 0 0.25rem;
-  font-weight: 700;
-}
-
-.bag-total-summary-strip {
+/* Image Showcase Box */
+.details-image-box {
+  background-color: #f8fafc;
+  border-radius: 24px;
+  padding: 3rem;
   display: flex;
   justify-content: center;
-  gap: 0.5rem;
-  font-size: 1.2rem;
+  align-items: center;
+  border: 1px solid var(--border-light);
+  min-height: 450px;
+}
+
+.details-image-box img {
+  max-width: 100%;
+  max-height: 400px;
+  object-fit: contain; /* Prevents stretching and distortion */
+  mix-blend-mode: multiply;
+}
+
+/* Info Panel Right Side */
+.details-info-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.details-category-badge {
+  align-self: flex-start;
+  background-color: #e6faef;
+  color: var(--brand-teal);
+  padding: 0.4rem 1rem;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.details-title {
+  font-size: 2.5rem;
   font-weight: 800;
-  margin: 1.5rem 0 1rem 0;
+  color: #0f172a;
+  margin-bottom: 0.5rem;
 }
 
-.btn-sidebar-checkout {
-  width: 100%;
-  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
-  color: #ffffff !important;
-  border: none !important;
-  padding: 0.8rem !important;
-  font-weight: 700 !important;
-  border-radius: 12px !important;
-  cursor: pointer;
-}
-
-
-/* ==========================================================================
-   MODULE 7: UNIVERSAL PREMIUM FORM SYSTEM (ADD / UPDATE VIEWS)
-   ========================================================================== */
-
-.form-layout-card-pane {
-  background-color: var(--bg-card);
-  border: 2px solid var(--border-primary);
-  border-radius: 24px;
-  padding: 2.5rem;
-  max-width: 800px;
-  margin: 190px auto 4px auto; /* Clean spacing offset for navbar layer stack */
-}
-
-.form-layout-card-pane h2 {
-  font-weight: 800;
-  font-size: 2rem;
+.details-brand {
+  font-size: 1.1rem;
+  color: var(--text-muted);
   margin-bottom: 1.5rem;
 }
 
-.form-label {
-  font-weight: 700 !important;
-  color: var(--text-main) !important;
-  margin-bottom: 0.4rem;
+.details-price {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--brand-teal);
+  margin-bottom: 1.5rem;
 }
 
-.form-control, .form-select {
-  background-color: var(--bg-input) !important;
-  border: 2px solid var(--border-primary) !important;
-  color: var(--text-main) !important;
-  border-radius: 10px !important;
-  padding: 0.6rem 1rem !important;
+.details-divider {
+  height: 1px;
+  background-color: var(--border-light);
+  margin: 1.5rem 0;
 }
 
-.form-control:focus, .form-select:focus {
-  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.15) !important;
-  border-color: var(--accent-cyan) !important;
+.details-description {
+  color: #475569;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+/* Admin Action Dashboard Section */
+.admin-actions-section {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background-color: #f8fafc;
+  border-radius: 16px;
+  border: 1px dashed #cbd5e1;
+}
+
+.btn-pill-danger {
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 50px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-pill-danger:hover {
+  background-color: #dc2626;
+}
+
+/* --- MODERN FORM WRAPPERS --- */
+.form-page-container {
+  max-width: 650px;
+  margin: 4rem auto;
+  padding: 0 1.5rem;
+}
+
+.modern-form-card {
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 3rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+  border: 1px solid var(--border-light);
+}
+
+.form-title-main {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 0.5rem;
+}
+
+.modern-form-group {
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.modern-form-group label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #475569;
+}
+
+.modern-form-control {
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  outline: none;
+  background-color: #f8fafc;
+}
+
+.modern-form-control:focus {
+  border-color: var(--brand-teal);
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(59, 151, 129, 0.15);
+}
+
+.image-preview-slot {
+  width: 120px;
+  height: 120px;
+  border-radius: 12px;
+  border: 2px dashed #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #f8fafc;
+}
+
+.image-preview-slot img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }

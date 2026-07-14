@@ -6,6 +6,7 @@ import com.Kabirarjun.Compras.Services.LoginService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,17 +44,18 @@ public class LoginController {
 
     // 2. Login endpoint receiving encrypted password
     @PostMapping("/login")
-    public User login(@RequestBody User request) {
+    public ResponseEntity<User> login(@RequestBody User request) {
         try {
             // Decrypt password using Private Key\
             log.info("Received login request for email: {}", request.getEmail());
             String decryptedPassword = RsaUtil.decrypt(request.getPassword(), keyPair.getPrivate());
-            return loginService.getUser(request.getEmail(), decryptedPassword);
+            User user =  loginService.getUser(request.getEmail(), decryptedPassword);
+            return new ResponseEntity(user , HttpStatus.OK);
             // Proceed with normal authentication and BCrypt validation using decryptedPassword
 
         } catch (Exception e) {
             log.error("Error during decryption or login process: {}", e.getMessage());
-            return null; // Handle decryption error appropriately
+            return new ResponseEntity(null,HttpStatus.TOO_MANY_REQUESTS);// Return an error response or handle it appropriately
         }
     }
 
