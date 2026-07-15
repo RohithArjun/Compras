@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import axios from "./axios";
 import heroImg from "../assets/homepageimage.jpg"; 
 
 const CATEGORY_CARDS = [
@@ -22,7 +22,7 @@ const Home = ({ data, addToCart, currentView, setCurrentView, selectedCategory, 
         data.map(async (product) => {
           try {
             const response = await axios.get(
-              `http://localhost:8080/api/product/${product.id}/image`,
+              `/product/${product.id}/image`,
               { responseType: "blob" }
             );
             return { ...product, imageUrl: URL.createObjectURL(response.data) };

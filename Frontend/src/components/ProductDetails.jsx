@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import axios from "axios";
+import axios from "./axios";
 
 const ProductDetail = ({ addToCart, userRole }) => {
   const { id } = useParams();
@@ -13,11 +13,11 @@ const ProductDetail = ({ addToCart, userRole }) => {
   useEffect(() => {
     setLoading(true);
     // 1. Fetch text metadata specifications
-    axios.get(`http://localhost:8080/api/product/${id}`)
+    axios.get(`/product/${id}`)
       .then((res) => {
         setProduct(res.data);
         // 2. Fetch the corresponding raw image data blob directly from backend storage
-        return axios.get(`http://localhost:8080/api/product/${id}/image`, { responseType: "blob" });
+        return axios.get(`/product/${id}/image`, { responseType: "blob" });
       })
       .then((imageResponse) => {
         setImageUrl(URL.createObjectURL(imageResponse.data));
@@ -33,7 +33,7 @@ const ProductDetail = ({ addToCart, userRole }) => {
   const handleDelete = async () => {
     if (window.confirm("Are you completely sure you want to permanently delete this item inventory data record?")) {
       try {
-        await axios.delete(`http://localhost:8080/api/product/${id}`);
+        await axios.delete(`/product/${id}`);
         alert("Product record has been successfully purged from database storage.");
         navigate("/");
       } catch (err) {

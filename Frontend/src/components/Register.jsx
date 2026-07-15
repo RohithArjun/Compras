@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import axios from "axios";
+import axios from "./axios";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -36,7 +36,7 @@ const Register = () => {
 
     try {
       // Sends exactly: firstName, lastName, email, phoneNumber, password, userRole
-      const response = await axios.post("http://localhost:8080/api/register", payload);
+      const response = await axios.post("/register", payload);
       alert(response.data || "User registered successfully!");
       navigate("/login");
     } catch (err) {

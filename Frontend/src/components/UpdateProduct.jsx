@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import axios from "axios";
+import axios from "./axios";
 
 const UpdateProduct = () => {
   const { id } = useParams();
@@ -15,10 +15,10 @@ const UpdateProduct = () => {
 
   useEffect(() => {
     // Synchronous resolution map chain
-    axios.get(`http://localhost:8080/api/product/${id}`)
+    axios.get(`/product/${id}`)
       .then((res) => {
         setProduct(res.data);
-        return axios.get(`http://localhost:8080/api/product/${id}/image`, { responseType: "blob" });
+        return axios.get(`/product/${id}/image`, { responseType: "blob" });
       })
       .then((imgRes) => {
         setPreviewUrl(URL.createObjectURL(imgRes.data));
@@ -52,7 +52,7 @@ const UpdateProduct = () => {
     }
 
     try {
-      await axios.put(`http://localhost:8080/api/product/${id}`, formData, {
+      await axios.put(`/product/${id}`, formData, {
         headers: { "Content-Type": "multipart/form-data" }
       });
       alert("Inventory database modifications synchronized successfully!");

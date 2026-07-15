@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import axios from "axios";
+import axios from "./axios";
 
 const AddProduct = () => {
   const navigate = useNavigate();
@@ -33,7 +33,7 @@ const AddProduct = () => {
     }
 
     try {
-      await axios.post("http://localhost:8080/api/product", formData, {
+      await axios.post("/product", formData, {
         headers: { "Content-Type": "multipart/form-data" }
       });
       alert("Product published successfully into standard operational inventory!");

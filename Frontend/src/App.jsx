@@ -1,7 +1,7 @@
 import "./App.css";
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import axios from "axios";
+import axios from "./axios";
 import Home from "./components/Home";
 import Navbar from "./components/Navbar";
 import Cart from "./components/Cart";
@@ -27,7 +27,7 @@ function App() {
 
   // Fetch product list directly on app mount
   useEffect(() => {
-    axios.get("http://localhost:8080/api/products")
+    axios.get("/products")
       .then((response) => setData(response.data))
       .catch((error) => console.error("Error fetching product data:", error));
   }, []);
