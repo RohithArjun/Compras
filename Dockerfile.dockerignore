@@ -1,0 +1,27 @@
+# Maven/Gradle output
+target/
+build/
+.gradle/
+
+# IDE settings
+.idea/
+.vscode/
+*.iml
+*.sublime-*
+
+# Version control
+.git
+.gitignore
+.gitattributes
+
+# Frontend directories (since they deploy separately)
+Frontend/
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Secrets or local environment configs
+.env
+*.local
