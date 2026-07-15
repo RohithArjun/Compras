@@ -398,7 +398,7 @@ body {
   
   .form-title-main {
     font-size: 1.75rem !important; /* Scales title font down cleanly */
-    marginBottom: 1.5rem !important;
+    margin-Bottom: 1.5rem !important;
   }
   
   .modern-form-group {
