@@ -371,3 +371,37 @@ body {
   height: 100%;
   object-fit: contain;
 }
+
+/* Base responsive constraints for the layout wrappers */
+.responsive-form-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 0 1rem; /* Prevents card from sticking directly to the glass phone edges */
+  box-sizing: border-box;
+}
+
+.modern-form-card {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Mobile Layout Fine-Tuning Queries */
+@media (max-width: 576px) {
+  .responsive-form-container {
+    margin: 1rem auto;
+  }
+  
+  .modern-form-card {
+    padding: 1.5rem !important; /* Slightly tighter internal card spacing for mobile viewports */
+  }
+  
+  .form-title-main {
+    font-size: 1.75rem !important; /* Scales title font down cleanly */
+    marginBottom: 1.5rem !important;
+  }
+  
+  .modern-form-group {
+    margin-bottom: 1rem !important; /* Tightens input groups stack height */
+  }
+}
