@@ -1,4 +1,4 @@
-import axios from "../axios.jsx";
+import axios from "axios";
 
 // 1. Get the Render URL from Vercel's environment variables, 
 //    or default to localhost when running on your computer.
