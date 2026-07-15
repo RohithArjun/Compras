@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import axios from "../axios";
+import axios from "../axios.jsx";
 
 const ProductDetail = ({ addToCart, userRole }) => {
   const { id } = useParams();

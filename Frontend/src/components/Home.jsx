@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "../axios";
+import axios from "../axios.jsx";
 import heroImg from "../assets/homepageimage.jpg"; 
 
 const CATEGORY_CARDS = [

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import JSEncrypt from "jsencrypt";
-import axios from "../axios";
+import axios from "../axios.jsx";
 
 const Login = ({ setCurrentUser }) => {
   const navigate = useNavigate();
